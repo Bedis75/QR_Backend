@@ -13,7 +13,7 @@ exports.getDocumentByQr = async (req, res) => {
       data: { scanCount: { increment: 1 }, updatedAt: new Date() }
     });
 
-    res.json(updated);
+  res.json(JSON.parse(JSON.stringify(updated, (key, value) => typeof value === 'bigint' ? value.toString() : value)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -25,7 +25,7 @@ exports.createDocument = async (req, res) => {
     const doc = await prisma.document.create({
       data: { title, description, qrcode, filePath }
     });
-    res.json(doc);
+  res.json(JSON.parse(JSON.stringify(doc, (key, value) => typeof value === 'bigint' ? value.toString() : value)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -41,7 +41,7 @@ exports.updateDocument = async (req, res) => {
       data: { title, description, qrcode, filePath, updatedAt: new Date() }
     });
 
-    res.json(updated);
+  res.json(JSON.parse(JSON.stringify(updated, (key, value) => typeof value === 'bigint' ? value.toString() : value)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -51,7 +51,7 @@ exports.deleteDocument = async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.document.delete({ where: { id: BigInt(id) } });
-    res.json({ message: "Document deleted" });
+  res.json({ message: "Document deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -60,7 +60,7 @@ exports.deleteDocument = async (req, res) => {
 exports.getAllDocuments = async (req, res) => {
   try {
     const docs = await prisma.document.findMany({ orderBy: { createdAt: "desc" } });
-    res.json(docs);
+  res.json(JSON.parse(JSON.stringify(docs, (key, value) => typeof value === 'bigint' ? value.toString() : value)));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
