@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model document {
+  id          BigInt    @id @default(autoincrement())
+  title       String
+  description String?
+  qrcode      String    @unique(map: "Document_qrcode_key")
+  filePath    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  scanCount   Int       @default(0)
+}
